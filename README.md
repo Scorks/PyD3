@@ -1,2 +1,2 @@
-# Apriori
-Implementation of the Apriori (used for mining frequent itemsets for boolean association rules), wrapped in a GUI.
+# Pycart
+Implementation of the CART (classification and regression tree) algorithm developed by Leo Breiman, Jerome Friedman, Charles J. Stone, R.A. Olshen in 1984.
