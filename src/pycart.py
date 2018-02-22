@@ -1,8 +1,9 @@
-#!/usr/bin/python
+from Tkinter import *
 
-import Tkinter
-top = Tkinter.Tk()
-
-# Code to add widgets will go here...
+top = Tk()
+file_path_label = Label(top, text="Path to data set: " )
+file_path_label.pack( side = LEFT)
+file_path = Entry(top, bd =5)
+file_path.pack(side = RIGHT)
 
 top.mainloop()
