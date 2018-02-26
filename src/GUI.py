@@ -1,3 +1,8 @@
+'''
+Tkinter code for providing the GUI for the CART algorithm
+author: Caro Strickland
+'''
+
 from Tkinter import *
 
 top = Tk()
