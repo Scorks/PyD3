@@ -1,3 +1,7 @@
+'''
+script to define and provide algorithm for the CART algorithm
+author: Caro Strickland
+'''
 
 import sys
 import os
