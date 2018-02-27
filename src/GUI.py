@@ -1,5 +1,5 @@
 '''
-Tkinter code for providing the GUI for the CART algorithm
+Tkinter code for providing the GUI for the ID3 algorithm
 author: Caro Strickland
 '''
 
