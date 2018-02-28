@@ -9,6 +9,7 @@ import sqlite3
 table_storage = [] # stores a list of dictionaries representing the table
 column_types = [] # stores the names of each column
 class_type = sys.argv[2] # the class of the table
+base_entropy = 0 # setting the initial base entropy value to 0
 
 # resolve the column types
 with open(sys.argv[1]) as f:
@@ -62,7 +63,9 @@ def base_entropy(data):
 	entropy = math.log(equation_section_i, 2.0)*(equation_section_i) + math.log(equation_section_ii, 2.0)*(equation_section_ii)
 	
 	return entropy
+base_entropy(table_storage) # sets the base_entropy value to the calculated value
 
+def attribute_entropy(data, attribute):
+	
 
-print base_entropy(table_storage)
 
