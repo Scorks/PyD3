@@ -21,4 +21,8 @@ input_file = open(sys.argv[1], 'r').read().split('\n') # input table
 for line in iter(input_file):
 	line = line.split()
 	if line:
-		# TODO: CREATE LIST OF DICTS FOR TABLE STORAGE
+		temp_dict = {}
+		for item in column_types:
+			temp_dict[item] = line[column_types.index(item)]
+		table_storage.append(temp_dict)
+del table_storage[0] # remove the list of just column types
