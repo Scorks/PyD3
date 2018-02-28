@@ -1,0 +1,6 @@
+Education Income MaritalStatus Purchase
+masters    high      single     yes
+highschool low       single     no
+masters    low       married    yes
+bachelors  high      married    no
+masters    low       single     no    
