@@ -3,8 +3,7 @@ Implementation of the ID3 algorithm
 '''
 import sys
 import math
-import csv
-import sqlite3
+import operator
 
 table_storage = [] # stores a list of dictionaries representing the table
 column_types = [] # stores the names of each column
@@ -31,7 +30,6 @@ for line in iter(input_file):
 			temp_dict[item] = line[column_types.index(item)]
 		table_storage.append(temp_dict)
 del table_storage[0] # remove the list of just column types
-
 
 #-----------------------------------------------------------------------------
 
@@ -69,9 +67,10 @@ def base_entropy(data, attribute):
 	# calculate the base entropy value
 	equation_section_i = (class_type_i_count/float(sample_size))
 	equation_section_ii = (class_type_ii_count/float(sample_size))
-	entropy = math.log(equation_section_i, 2.0)*(equation_section_i) + math.log(equation_section_ii, 2.0)*(equation_section_ii)
+	entropy = -1*(math.log(equation_section_i, 2.0)*(equation_section_i) + math.log(equation_section_ii, 2.0)*(equation_section_ii))
 	
 	return entropy
+
 base_entropy = base_entropy(table_storage, class_type) # sets the base_entropy value to the calculated value
 
 '''
@@ -117,15 +116,42 @@ def attribute_entropy(data, attribute):
 		if (equation_section_i == 0.0):
 			equation_part_i = 0.0
 		else:
-			equation_part_i = (equation_section_i * math.log(equation_section_i))
+			equation_part_i = (equation_section_i * math.log(equation_section_i, 2))
 		if (equation_section_ii == 0.0):
 			equation_part_ii = 0.0
 		else:
-			equation_part_ii = (equation_section_ii * math.log(equation_section_ii))
-		equation = (total_occurances/float(sample_size))*(equation_part_i + equation_part_ii)
-		print equation
+			equation_part_ii = (equation_section_ii * math.log(equation_section_ii, 2))
+		equation = -1*(total_occurances/float(sample_size))*(equation_part_i + equation_part_ii)
+		entropy = entropy + equation # update entropy
+		entropy = base_entropy - entropy
+	return entropy
 
-	print attribute_type_dict
+'''
+returns a set of different types within an attribute
+@data: table of data
+@attribute: name of the attribute to parse through
+'''
+def get_attribute_types(data, attribute):
+	attribute_types = [] # set to return
+	for item in data:
+		if item[attribute] not in attribute_types:
+			attribute_types.append(item[attribute])
+	return attribute_types
 
+#-----------------------------------------------------------------------------
 
-attribute_entropy(table_storage, "Education")
+def create_tree(data):
+	tree_dictionary = {} # final dictionary that will be appended to throughout and returned
+	entropy_scores = {} # will store the entropy values for attributes
+	attribute_list = column_types # removes the class type from list of attributes
+	attribute_list.remove(class_type)
+
+	# discover parent node
+	for item in attribute_list:
+		entropy_scores[item] = attribute_entropy(data, item)
+	root_node = max(entropy_scores.iteritems(), key=operator.itemgetter(1))[0] # find attribute with the highest entropy value
+	tree_dictionary[root_node] = get_attribute_types(data, root_node)
+	print tree_dictionary
+	
+create_tree(table_storage)
+# print attribute_entropy(table_storage, "Education")
