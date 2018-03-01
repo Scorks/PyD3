@@ -146,12 +146,15 @@ def create_tree(data):
 	attribute_list = column_types # removes the class type from list of attributes
 	attribute_list.remove(class_type)
 
-	# discover parent node
+	# discover parent node and add it to tree
 	for item in attribute_list:
 		entropy_scores[item] = attribute_entropy(data, item)
 	root_node = max(entropy_scores.iteritems(), key=operator.itemgetter(1))[0] # find attribute with the highest entropy value
-	tree_dictionary[root_node] = get_attribute_types(data, root_node)
-	print tree_dictionary
+	tree_dictionary[root_node] = get_attribute_types(data, root_node) # adds root node to tree dictionary along with children types
+	attribute_list.remove(root_node)
+	temp_storage = table_storage
+
+
 	
 create_tree(table_storage)
 # print attribute_entropy(table_storage, "Education")
