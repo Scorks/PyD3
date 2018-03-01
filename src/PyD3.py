@@ -10,6 +10,8 @@ table_storage = [] # stores a list of dictionaries representing the table
 column_types = [] # stores the names of each column
 class_type = sys.argv[2] # the class of the table
 base_entropy = 0 # setting the initial base entropy value to 0
+class_i = "" # to be set in the base_entropy method - first of the two binary class types
+class_ii = "" # to be set in the base_entropy method - second of the two binary class types
 
 # resolve the column types
 with open(sys.argv[1]) as f:
@@ -34,10 +36,11 @@ del table_storage[0] # remove the list of just column types
 #-----------------------------------------------------------------------------
 
 '''
-calculate the initial entropy
+calculates the initial entropy (info(D))
 @data: the table_storage
+@ attribute: class type to calculate the entropy with
 '''
-def base_entropy(data):
+def base_entropy(data, attribute):
 	class_type_i = " " # first of the two binary class types
 	class_type_ii = " " # second of the two binary class types
 	class_type_i_count = 0 # count for number of binary class I types
@@ -46,15 +49,21 @@ def base_entropy(data):
 
 	for item in data:
 		if (class_type_i == " "):
-			class_type_i = item[class_type]
-		elif (class_type_i != item[class_type]):
-			class_type_ii = item[class_type]
+			class_type_i = item[attribute]
+		elif (class_type_i != item[attribute]):
+			class_type_ii = item[attribute]
 			break
 
+	# setting the global class_i and class_ii types for future entropy calculations
+	global class_i
+	global class_ii
+	class_i = class_type_i
+	class_ii = class_type_ii
+
 	for item in data:
-		if (item[class_type] == class_type_i):
+		if (item[attribute] == class_type_i):
 			class_type_i_count += 1
-		elif (item[class_type] == class_type_ii):
+		elif (item[attribute] == class_type_ii):
 			class_type_ii_count += 1
 
 	# calculate the base entropy value
@@ -63,9 +72,60 @@ def base_entropy(data):
 	entropy = math.log(equation_section_i, 2.0)*(equation_section_i) + math.log(equation_section_ii, 2.0)*(equation_section_ii)
 	
 	return entropy
-base_entropy(table_storage) # sets the base_entropy value to the calculated value
+base_entropy = base_entropy(table_storage, class_type) # sets the base_entropy value to the calculated value
 
+'''
+calculates entropy of table 'data' on attribute 'attribute' (info_attribute(D))
+@data: the table_storage (altered or unaltered)
+@attribute: attribute to calculate the entropy of
+'''
 def attribute_entropy(data, attribute):
-	
+	sample_size = len(data) # total number of entries in the table
+	'''
+	'attribute_type_dict' is a dictionary with a key value of an attribute type, and a value of a list
+	the list has a layout of [a, b, c]
+	a = the number of occurances of this type within the attribute
+	b = the number of type i within this attribute type
+	c = the number of type ii within this attribute type
+	'''
+	attribute_type_dict = {} # initializing dictionary to hold each different tpye within our attribute as well as their count
+	entropy = 0 # entropy which will eventually be returned
+
+	for item in data:
+		if item[attribute] not in attribute_type_dict: # if this attribute type is not already in our dictionary...
+			attribute_type_dict[item[attribute]] = [1, 0, 0] # add it to the dictionary
+			# check whether it is of type i or type ii and set:
+			if item[class_type] == class_i:
+				attribute_type_dict[item[attribute]][1] = 1
+			elif item[class_type] == class_ii:
+				attribute_type_dict[item[attribute]][2] = 1
+		else:
+			attribute_type_dict[item[attribute]][0] = attribute_type_dict[item[attribute]][0] + 1 # increment by 1
+			# check whether it is of type i or type ii and set:
+			if item[class_type] == class_i:
+				attribute_type_dict[item[attribute]][1] = attribute_type_dict[item[attribute]][1] + 1 # increment by 1
+			elif item[class_type] == class_ii:
+				attribute_type_dict[item[attribute]][2] = attribute_type_dict[item[attribute]][2] + 1 # increment by 1
+	for item in attribute_type_dict:
+		total_occurances = attribute_type_dict[item][0]
+		class_i_occurances = attribute_type_dict[item][1]
+		class_ii_occurances = attribute_type_dict[item][2]
+
+		equation_section_i = (class_i_occurances/float(total_occurances))
+		equation_section_ii = (class_ii_occurances/float(total_occurances))
+
+		if (equation_section_i == 0.0):
+			equation_part_i = 0.0
+		else:
+			equation_part_i = (equation_section_i * math.log(equation_section_i))
+		if (equation_section_ii == 0.0):
+			equation_part_ii = 0.0
+		else:
+			equation_part_ii = (equation_section_ii * math.log(equation_section_ii))
+		equation = (total_occurances/float(sample_size))*(equation_part_i + equation_part_ii)
+		print equation
+
+	print attribute_type_dict
 
 
+attribute_entropy(table_storage, "Education")
