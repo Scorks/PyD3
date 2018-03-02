@@ -138,6 +138,19 @@ def get_attribute_types(data, attribute):
 			attribute_types.append(item[attribute])
 	return attribute_types
 
+'''
+returns a table stripped with only the rows of a given attribute type
+@data: table of data
+@attribute: name of attribute
+@attribute_type: attribute types we want to keep within the stripped table
+'''
+def strip_table(data, attribute, attribute_type):
+	return_table = [] # stripped table to return
+	for item in data:
+		if item[attribute] == attribute_type:
+			return_table.append(item)
+	return return_table
+
 #-----------------------------------------------------------------------------
 
 def create_tree(data):
@@ -152,9 +165,9 @@ def create_tree(data):
 	root_node = max(entropy_scores.iteritems(), key=operator.itemgetter(1))[0] # find attribute with the highest entropy value
 	tree_dictionary[root_node] = get_attribute_types(data, root_node) # adds root node to tree dictionary along with children types
 	attribute_list.remove(root_node)
-	temp_storage = table_storage
-
-
 	
+	for item in get_attribute_types(data, root_node):
+		
+		
 create_tree(table_storage)
 # print attribute_entropy(table_storage, "Education")
