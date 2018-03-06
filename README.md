@@ -6,6 +6,6 @@ PyD3 is an Implementation of the ID3 (Iterative Dichotomiser 3) algorithm, used 
 
 ## How to Access
 
-Anyone can access the PyD3 UI located [here](www.pyd3online.com "PyD3").
+Anyone can access the PyD3 UI located [here](http://www.pyd3online.com "PyD3").
 
 Or, if you'd prefer to interpret the source code, you can run PyD3.py with specified arguments within the terminal.
