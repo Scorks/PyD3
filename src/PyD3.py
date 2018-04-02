@@ -1,9 +1,12 @@
+#!/usr/bin/env python
+
 import numpy as np
 import csv
 import math
 import sys
 import io
 import time
+from Tkinter import *
 
 '''
 Node class that encapsulates the information about all nodes in the tree
@@ -149,12 +152,16 @@ def create_node(data, attributes):
     for column in range(get_length(data) - 1):
         gain_values[column] = get_information_gain(data, column)
 
+    '''
     maxval = 0
     for n in gain_values:
         if (n > maxval):
             maxval = n
     i = np.where(gain_values == maxval)
     split_value = i[0][0]
+    '''
+
+    split_value = np.argmax(gain_values)
     
     node = Node(attributes[split_value])
     attributes = np.delete(attributes, split_value, 0)  
@@ -227,3 +234,4 @@ start_time = time.time()
 run()
 print "\n"
 print "Time Elapsed: ", ("%s seconds" % (time.time() - start_time))
+
