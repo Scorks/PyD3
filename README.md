@@ -9,9 +9,9 @@ PyD3 is an Implementation of the ID3 (Iterative Dichotomiser 3) algorithm, used 
 To run PyD3, clone the repository to the desired directory and set it as your working directory. under src/, run PyD3.py 
 `python PyD3.py <path_to_table>`. The .txt table you provide *must* be in the format of:
 
-attribute1, attribute2, attribute3, ..., classifier <br />
-data1, data2, data3, ..., classifier_n <br />
-datax, datay, dataz, ..., classifier_m <br />
+attribute_1, attribute_2, attribute_3, ..., classifier <br />
+data_1, data_2, data_3, ..., classifier_n <br />
+data_x, data_y, data_z, ..., classifier_m <br />
 ... <br />
 
 Examples of the necessary table format are available in ../sample_tables.
