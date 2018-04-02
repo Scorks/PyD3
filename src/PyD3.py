@@ -134,7 +134,7 @@ def get_entropy(X):
     return sums
 
 '''
-recusrive method to create a set of nodes that will store data essential
+recursive method to create a set of nodes that will store data essential
 to building the final ID3 decision tree
 
 @data: the data set we are looking at
