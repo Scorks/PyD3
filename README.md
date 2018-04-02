@@ -6,6 +6,10 @@ PyD3 is an Implementation of the ID3 (Iterative Dichotomiser 3) algorithm, used 
 
 ## How to Access
 
-Anyone can access the PyD3 UI located [here](http://www.pyd3online.com "PyD3"). This UI uses [Treant.js](https://github.com/fperucic/treant-js "Treant.js") communicating with ouput from Python scripts.
+To run PyD3, clone the repository to the desired directory and set it as your working directory. under src/, run PyD3.py 
+`python PyD3.py <path_to_table>`. The table you provide must be in the format of:
 
-Or, if you'd prefer to interpret the source code, you can run PyD3.py with specified arguments within the terminal.
+attribute1, attribute2, attribute3, ..., classifier
+data1, data2, data3, ..., classifier_n
+datax, datay, dataz, ..., classifier_m
+...
