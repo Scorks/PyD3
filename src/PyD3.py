@@ -21,12 +21,22 @@ class Node:
     def __str__(self):
         return self.attribute
 
+'''
+gets the width of a 2-dimensional NP array (number of rows)
+
+@arr: Numpy array
+'''
 def get_width(arr):
     count = 0
     for item in arr:
         count = count + 1
     return count
 
+'''
+gets the length of a 2-dimensional NP array (number of columns)
+
+@arr: Numpy array
+'''
 def get_length(arr):
     count = 0
     for item in arr[0]:
@@ -44,7 +54,14 @@ def leaf_check(data):
     else:
         return False
 
-def create_subtable(data, attribute, delete_bool):
+'''
+splits a table based on a provided NP table and the attribute in which to split
+
+@data: data set we are looking at
+@attribute: attribute to split on
+@delete_bool: where we delete items or not
+'''
+def split_table(data, attribute, delete_bool):
     attribute_dict = {}
     items = np.unique(data[:, attribute])
     count = np.zeros((get_width(items), 1), dtype=np.int32) 
@@ -68,13 +85,13 @@ def create_subtable(data, attribute, delete_bool):
         
 
 '''
-Performs the information gain calculations and returns the index
+performs the information gain calculations and returns the index
 of the selected attribute
 
 @data: data set we are looking at 
 '''
 def get_information_gain(data, attribute):
-    items, dict = create_subtable(data, attribute, False)
+    items, dict = split_table(data, attribute, False)
 
     total_size = get_width(data)
     entropy_list = np.zeros((get_width(items), 1))
@@ -90,7 +107,14 @@ def get_information_gain(data, attribute):
         
     return total_entropy
 
+'''
+helper method for get_information_gain to split up the mathematical tasks into
+smaller subsections
+
+@X: classifier value(s)
+'''
 def get_entropy(X):
+    print X
     items = np.unique(X)
 
     if items.size == 1: # checks if all true or all false
@@ -107,6 +131,13 @@ def get_entropy(X):
 
     return sums
 
+'''
+recusrive method to create a set of nodes that will store data essential
+to building the final ID3 decision tree
+
+@data: the data set we are looking at
+@attributes: the list of attributes (first line in the input table)
+'''
 def create_node(data, attributes):
     if leaf_check(data):
         node = Node("") # create a new node
@@ -129,7 +160,7 @@ def create_node(data, attributes):
     node = Node(attributes[split_value])
     attributes = np.delete(attributes, split_value, 0)  
 
-    items, dict = create_subtable(data, split_value, True)
+    items, dict = split_table(data, split_value, True)
 
     for x in range(get_width(items)):
         child_node = create_node(dict[items[x]], attributes)
@@ -137,24 +168,40 @@ def create_node(data, attributes):
     
     return node
 
-# prints the tabbing for tables
-def indentation(size):
-    spaces = ""
-    for x in range(size):
-        spaces += "   "
-    return spaces
+'''
+recusrive function responsible for building a textual representation of
+the final ID3 decision tree by printing out essential node information at
+different indented levels
 
+@node: starting Node
+@level: the level of the tree that we are currently at (for indentation purposes)
+'''
 def tree(node, level):
+    spaces = ""
     if (node.classification != ""): # if node IS a leaf node
-        print indentation(level), node.classification
+        for x in range(level):
+            spaces += "   "
+        print spaces, node.classification
         return
 
-    print indentation(level), node.attribute
+    spaces = ""
+    for x in range(level):
+        spaces += "   "
+    print spaces, node.attribute
 
+    spaces = ""
     for value, i in node.children:
-        print indentation(level + 1), value
+        for x in range(level + 1):
+            spaces += "   "
+        print spaces, value
+        spaces = ""
         tree(i, level + 2)
 
+'''
+method to help declutter tha main method, takes in a file in a specific format
+and converts it into a numpy array that we can work with - also begins the
+method to start building the ID3 decision tree
+'''
 def run():
     with open(sys.argv[1]) as f:
         column_line = f.readline()
