@@ -14,9 +14,9 @@ Node class that encapsulates the information about all nodes in the tree
 '''
 class Node:
     def __init__(self, attribute):
-        self.attribute = attribute # attribute type of the node
         self.children = [] # children of the selected node
         self.classification = "" # classifier for node
+        self.attribute = attribute # attribute type of the node
         
     def __str__(self):
         return self.attribute
@@ -114,7 +114,6 @@ smaller subsections
 @X: classifier value(s)
 '''
 def get_entropy(X):
-    print X
     items = np.unique(X)
 
     if items.size == 1: # checks if all true or all false
