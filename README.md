@@ -6,12 +6,14 @@ PyD3 is an Implementation of the ID3 (Iterative Dichotomiser 3) algorithm, used 
 
 ## How to Access
 
+There are two options for running this program. You can open it via the GUI, or via the command line. Both explanations are provided below.
+
 ### Open via GUI
 
 To run PyD3 via a GUI, ensure that the path to PyD3.py is executable. To do this, perform the following commands in the command line: <br />
 `chmod +x PyD3.py` <br />
 `export PATH=/path/to/script:$PATH` <br />
-Then, you can run the command:
+Then, you can run the command: <br />
 `python main.py <path_to_table>` <br />
 This will open the Tkinter GUI and provide a scrollable version of the ID3 decision tree.
 
