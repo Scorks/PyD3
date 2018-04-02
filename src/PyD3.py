@@ -61,11 +61,34 @@ def create_subtable(data, attribute, delete_bool):
             if data[y, attribute] == items[x]:
                 attribute_dict[items[x]][index] = data[y]
                 index += 1       
-        if delete_bool:
+        if delete_bool == True:
             attribute_dict[items[x]] = np.delete(attribute_dict[items[x]], attribute, 1)
         
     return items, attribute_dict
         
+
+'''
+Performs the information gain calculations and returns the index
+of the selected attribute
+
+@data: data set we are looking at 
+'''
+def get_information_gain(data, attribute):
+    items, dict = create_subtable(data, attribute, False)
+
+    total_size = get_width(data)
+    entropy_list = np.zeros((get_width(items), 1))
+    
+    for x in range(get_width(items)):
+        multiplication_factor = get_width(dict[items[x]])/(total_size * 1.0)
+        entropy_list[x] = multiplication_factor * get_entropy(dict[items[x]][:, -1])
+        
+    total_entropy = get_entropy(data[:, -1])
+    
+    for x in range(get_width(entropy_list)):
+        total_entropy -= entropy_list[x]
+        
+    return total_entropy
 
 def get_entropy(X):
     items = np.unique(X)
@@ -83,33 +106,6 @@ def get_entropy(X):
         sums += item * -1 * math.log(item, 2)
 
     return sums
-
-'''
-Performs the information gain calculations and returns the index
-of the selected attribute
-
-@data: data set we are looking at 
-'''
-def get_information_gain(data, attribute):
-    items, dict = create_subtable(data, attribute, False)
-
-    total_size = get_width(data)
-    entropies = np.zeros((get_width(items), 1))
-    intrinsic = np.zeros((get_width(items), 1))
-    
-    for x in range(get_width(items)):
-        ratio = get_width(dict[items[x]])/(total_size * 1.0)
-        entropies[x] = ratio * get_entropy(dict[items[x]][:, -1])
-        intrinsic[x] = ratio * math.log(ratio, 2)
-        
-    total_entropy = get_entropy(data[:, -1])
-    iv = -1 * sum(intrinsic)
-    
-    for x in range(get_width(entropies)):
-        total_entropy -= entropies[x]
-        
-    return total_entropy / iv
-
 
 def create_node(data, attributes):
     if leaf_check(data):
@@ -175,9 +171,9 @@ def run():
     del data[0]   
     reformed_data = np.array(data)
 
-    node = create_node(reformed_data, column_types)
+    start_node = create_node(reformed_data, column_types)
 
-    tree(node, 0)
+    tree(start_node, 0)
 
 # MAIN METHOD----------------------------------------------------------------
 
